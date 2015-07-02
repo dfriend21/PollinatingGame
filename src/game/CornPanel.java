@@ -1,14 +1,12 @@
 package game;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -26,6 +24,8 @@ public class CornPanel extends JPanel implements MouseListener {
 	String bottomImage;
 	HashMap<String, BufferedImage> images;
 	CornImage cornImage;
+	int imageWidth;
+	int imageHeight;
 	
 	public CornPanel(PanelInfo panelInfo){
 		images = new HashMap<String, BufferedImage>();
@@ -35,6 +35,11 @@ public class CornPanel extends JPanel implements MouseListener {
 		bottomImage = panelInfo.bottomImage;
 		
 		loadImages();
+	}
+	
+	@Override
+	public Dimension getPreferredSize(){
+		return new Dimension(1000,1000);
 	}
 	
 	public void loadImages(){
@@ -54,6 +59,9 @@ public class CornPanel extends JPanel implements MouseListener {
 			cornImage.middleY = 484;
 			cornImage.bottomX = 247;
 			cornImage.bottomY = 646;
+			
+			imageWidth = cornImage.getImage().getWidth();
+			imageHeight = cornImage.getImage().getHeight();
 		} catch(IOException e){
 			e.printStackTrace();
 		}
@@ -72,7 +80,7 @@ public class CornPanel extends JPanel implements MouseListener {
 		repaint();
 	}
 	
-	public void paintComponent(Graphics g){
+	protected void paintComponent(Graphics g){
 		BufferedImage image = cornImage.getImage();
 		g.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), this);
 		if(topImage != "none"){
