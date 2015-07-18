@@ -11,23 +11,18 @@ import javax.swing.JPanel;
 
 public class Game implements Runnable{
 	
-	final double SHOOT_PROB = .33;
-	final double SILKED_SHOOT_PROB = .33;
-	final double SHOOTBAG_PROB = .34;
+	final static double SHOOT_PROB = .33;
+	final static double SILKED_SHOOT_PROB = .33;
+	final static double SHOOTBAG_PROB = .34;
 	
-	JFrame frame;
-	JPanel gameContainer;
+	final static int PLANT_GAP_WIDTH = 500;
+	static JFrame frame;
 
-	ArrayList<CornPanel> cornPanels;
+	static ArrayList<CornPanel> cornPanels;
 	
 	public Game(){
 		frame = new JFrame();
 		cornPanels = new ArrayList<CornPanel>();
-		//gameContainer = new JPanel();
-		//gameContainer.setSize(1000, 1000);
-		//gameContainer.setLayout(null);
-		//gameContainer.setLayout(new BorderLayout());
-		//gameContainer.setBackground(new Color(214, 76, 123));
 		//frame.setSize(1000, 1000);
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = ((int) tk.getScreenSize().getWidth());
@@ -38,8 +33,6 @@ public class Game implements Runnable{
 		//frame.setLayout(new BorderLayout());
 		frame.setBackground(new Color(98, 249, 255));
 		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //frame.getContentPane().add(gameContainer);
-        //gameContainer.setVisible(true);
         
 	    frame.setVisible(true);
 	}
@@ -92,14 +85,15 @@ public class Game implements Runnable{
 		CornPanel cornPanel = new CornPanel(panelInfo);
 		cornPanel.setSize(1000,1000);
 		cornPanels.add(cornPanel);
-		//cornPanel.setBackground(new Color(231, 176, 156));
-        //gameContainer.add(cornPanel);
-        //gameContainer.setBackground(new Color(215,2,65));
 		frame.add(cornPanel);
 		cornPanel.setLocation(frame.getWidth(),frame.getHeight()/4);
         cornPanel.setVisible(true);
 		frame.getContentPane().repaint();
 		frame.repaint();
+	}
+	
+	public void initializePanels(){
+		
 	}
 	
 	public void animateGame(){
@@ -113,28 +107,22 @@ public class Game implements Runnable{
 		}
 	}
 	
-	public void runGame(){
-		
-	}
-	
-	public static void main(String[] args) {
-		Game game = new Game();
-		Thread t = new Thread(game);
-		t.start();
-	}
 
 	@Override
 	public void run() {
+		CornPanelBuilder cpb = new CornPanelBuilder();
+		Thread PanelGenerator = new Thread(cpb);
+		PanelGenerator.start();
 		int counter = 0;
 		while(true){
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			if(counter == 0){
-				addCornPanel();
+				//addCornPanel();
+				
 			} 
 			counter++;
 			if(counter == 500){
@@ -144,5 +132,12 @@ public class Game implements Runnable{
 			frame.setBackground(new Color(98, 249, 255));
 			animateGame();
 		}
+		
+	}
+
+	public static void main(String[] args) {
+		Game game = new Game();
+		Thread t = new Thread(game);
+		t.start();
 	}
 }
